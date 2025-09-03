@@ -4,9 +4,10 @@ FROM python:3.12-slim-bookworm
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
+# Copy requirements first (for caching)
 COPY requirements.txt /app/
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,12 +16,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
+# Copy app source code
 COPY . /app/
 
+# Cloud Run requires the app to listen on $PORT
 ENV PORT=8080
+
 EXPOSE 8080
 
-
-
-# Command to run your application using app_api.py
+# Start the app
 CMD ["python", "app_api.py"]
