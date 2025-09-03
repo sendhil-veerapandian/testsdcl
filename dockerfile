@@ -17,7 +17,10 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . /app/
 
-EXPOSE 8000
+ENV PORT=8080
+EXPOSE 8080
+
+
 
 # Command to run your application using app_api.py
 CMD ["python", "app_api.py"]
